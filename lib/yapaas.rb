@@ -1,11 +1,22 @@
 module YAPAAS
-  VERSION = "0.1.0"
-
+  autoload :VERSION, 'yapaas/version'
   autoload :Machine, 'yapaas/machine'
   
   module_function
 
-  def machine?(name)
-    Machine.all.map(&:name).include?(name)
+  def machines
+    Machine.all.map(&:name)
   end
+
+  def machine?(name)
+    machines.include?(name.to_s)
+  end
+
+  def machine(name)
+    raise(NoSuchMachine, "there is no machine #{name}") unless machine?(name)
+    machines.find { |m| m.name == name }
+  end
+
+  Error = Class.new(StandardError)
+  NoSuchMachine = Class.new(Error)
 end

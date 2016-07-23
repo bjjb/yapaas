@@ -1,1 +1,5 @@
+#!/usr/bin/env ruby
 
+require "yapaas/cli"
+
+YAPAAS::CLI.call(ARGV)

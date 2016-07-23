@@ -1,28 +1,52 @@
-# Yet Another Platform As A Service
+# YaPaaS
 
-Easily deploy applications (or allow other to) on your own internet-connected
-machines.
+Yet Another Platform as a Service
 
-## Quick start
+A command-line client and micro-service node which makes it really easy to
+set up an manage a PaaS cloud.
 
-Install the yapaas client using `gem install yapaas`.
+## Installation
 
-You can install yapaas nodes on pretty much any machine that's connected to
-the internet. Ideally you'd have some IaaS provider with a supported API
-that provides a convenient interface, but you can use any machine onto which
-you can SSH. It's easier if the machines run docker, but it's not a hard
-requirement.
+Add this line to your application's Gemfile:
 
-A couple of alternatives are outlined here.
-
-### docker-machine
-
-The easiest route is if you already have [docker-machine][] available on your
-local machine - you can turn a docker-machine into a yapaas host really
-easily:
-
-```sh
-yapaas add -d docker-machine -m default mypaas
+```ruby
+gem 'yapaas'
 ```
 
-This command used yapaas to tell docker-machine to run yapaas on your 
+And then execute:
+
+    $ bundle
+
+Or install it yourself as:
+
+    $ gem install yapaas
+
+## Usage
+
+TODO: Write me, once the CLI and API are nailed down.
+
+## Development
+
+After checking out the repo, run `bin/setup` to install dependencies. Then,
+run `rake spec` to run the tests. You can also run `bin/console` for an
+interactive prompt that will allow you to experiment.
+
+To install this gem onto your local machine, run `bundle exec rake install`.
+To release a new version, update the version number in `version.rb`, and then
+run `bundle exec rake release`, which will create a git tag for the version,
+push git commits and tags, and push the `.gem` file to
+[rubygems.org](https://rubygems.org).
+
+## Contributing
+
+Bug reports and pull requests are welcome on GitHub at
+https://github.com/bjjb/yapaas. This project is intended to be a safe,
+welcoming space for collaboration, and contributors are expected to adhere to
+the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+
+
+## License
+
+The gem is available as open source under the terms of the
+[MIT License](http://opensource.org/licenses/MIT).
+
