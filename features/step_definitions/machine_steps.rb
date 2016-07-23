@@ -1,28 +1,34 @@
-Given /an IaaS at (.*)/ do |name|
-  DockerMachine.ensure(name)
+Given(/^a machine at (.+)$/) do |machine|
+  YAPAAS::Machine.create(machine) unless YAPAAS.machine?(machine)
 end
 
-Given(/^(.+) has SSH access to (.+)$/) do |user, host|
-  DockerMachine.machine(host).add_user(user)
+Given(/^yapaas isn't running on (.+)$/) do |machine|
+  system <<-COMMAND
+    eval $(docker-machine env #{machine}) && \
+    docker stop $(docker ps -q -f "label=yapaas")
+  COMMAND
 end
 
-Given(/^No PaaS is running on (.+)$/) do |host|
-  DockerMachine.machine(host).kill(/yapaas/)
+When(/^she runs `([^`]+)`$/) do |command|
+  system(command)
 end
 
-When(/^she runs yapaas create mypaas \-\-ssh (.+)$/) do |host|
+Then(/^yapaas should be running (\S+) on (\S+)$/) do |paas, machine|
+  system <<-COMMAND
+    eval $(docker-machine env #{machine}) && \
+    docker ps -f "label=yapaas=#{paas}"
+  COMMAND
+end
+
+Given(/^yapaas is running (\S+) on (\S+)$/) do |paas, machine|
   pending # Write code here that turns the phrase above into concrete actions
-end
-
-Then(/^mypaas should be running on (.+)$/) do |host|
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
-Given(/^a PaaS called mypaas is running on (.+)$/) do |host|
-  DockerMachine.machine(host).docker('run -d -l yapaas bjjb/nginx')
 end
 
 Then(/^there should be an error$/) do
   pending # Write code here that turns the phrase above into concrete actions
 end
 
+Then(/^the output should contain:$/) do |table|
+  # table is a Cucumber::MultilineArgument::DataTable
+  pending # Write code here that turns the phrase above into concrete actions
+end

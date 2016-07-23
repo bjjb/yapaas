@@ -1,25 +1,30 @@
-Feature: Initialize a yaPaaS cloud
+Feature: You can create a new cloud from scratch
 
-  Users should be able to set up a new PaaS from scratch, using their existing
-  SSH credentials. This is required to encourage adoption of yaPaaS.
+  Users should be able to set up a new PaaS from scratch on the machines to
+  which they already have access.
 
   Rules:
   - User must have SSH access to the machine on which they want to deploy
     yaPaaS
   - Either the machine already has Docker installed, or it can easily be
-    installed.
-
+    installed
   
   Background:
-    Given an IaaS at host.dev
-    And Alice has SSH access to host.dev
+    Given a machine at yapaas.test1
+    And a user Alice
+    And she has ssh access to yapaas.test1
 
   Scenario: Alice provisions a new PaaS
-    Given No PaaS is running on host.dev
-    When she runs yapaas create mypaas --ssh host.dev
-    Then mypaas should be running on host.dev
+    Given yapaas isn't running on default
+    When she runs `yapaas create -m default my.paas`
+    Then yapaas should be running my.paas on default
 
   Scenario: Alice tries to reprovision a PaaS
-    Given a PaaS called mypaas is running on host.dev
-    When she runs yapaas create mypaas --ssh host.dev
+    Given yapaas is running my.paas on default
+    When she runs `yapaas create -m default my.paas`
     Then there should be an error
+
+  Scenario: Alice provisions a new PaaS
+    Given yapaas is running my.paas on default
+    When she runs `yapaas create -m default my.other.paas`
+    Then yapaas should be running my.other.paas on default
