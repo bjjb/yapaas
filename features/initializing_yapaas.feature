@@ -10,21 +10,31 @@ Feature: You can create a new cloud from scratch
     installed
   
   Background:
-    Given a machine at yapaas.test1
-    And a user Alice
-    And she has ssh access to yapaas.test1
+    Given a docker machine at yapaas.test
 
-  Scenario: Alice provisions a new PaaS
-    Given yapaas isn't running on default
-    When she runs `yapaas create -m default my.paas`
-    Then yapaas should be running my.paas on default
+  Scenario: I list the available machines
+    When I run `yapaas machines`
+    Then I should see "yapaas.test"
 
-  Scenario: Alice tries to reprovision a PaaS
-    Given yapaas is running my.paas on default
-    When she runs `yapaas create -m default my.paas`
-    Then there should be an error
+  Scenario: I check which machines have yapaas on them
+    Given yapaas isn't running on the machine
+    When I run `yapaas machine status yapaas.test`
+    Then I should see "Status: Ready"
+    When I run `yapaas platform create -m yapaas.test my.paas`
+    And I run `yapaas machine status yapaas.test`
+    Then I should see "Status: Running"
 
-  Scenario: Alice provisions a new PaaS
-    Given yapaas is running my.paas on default
-    When she runs `yapaas create -m default my.other.paas`
-    Then yapaas should be running my.other.paas on default
+  Scenario: I provision a new PaaS
+    Given yapaas isn't running on the machine
+    When I run `yapaas platform create -m yapaas.test my.paas`
+    Then I should see "platform 'my.paas' created on 'yapaas.test'"
+
+  Scenario: I try to reprovision a PaaS
+    Given yapaas is running my.paas on the machine
+    When I run `yapaas platform create -m yapaas.test my.paas`
+    Then I should see "platform 'my.paas' is already running on 'yapaas.test'"
+
+  Scenario: I provision a new PaaS
+    Given yapaas is running my.paas on the machine
+    When I run `yapaas platform create -m yapaas.test another.paas`
+    Then I should see "platform 'another.paas' created on 'yapaas.test'"
