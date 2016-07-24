@@ -1,0 +1,15 @@
+#! /usr/bin/env sh
+
+# Checks that apt is available. Dies if not.
+which -s apt-get || (echo 'This script needs apt' && exit 1)
+# Update apt
+sudo apt-get update
+# Check for curl, install if needed
+which -s curl || sudo apt-get -y install curl
+# Check for docker, install it if missing, add user to docker group
+which -s docker || apt-get -y install docker.io && sudo groupadd $USER docker
+# Check for docker-machine, install it if missing
+which -s docker-machine || sudo curl -L \
+  "https://github.com/docker/machine/releases/download/v0.7.0/docker-machine-$(uname -s)-$(uname -m)" > \
+  /usr/local/bin/docker-machine && \
+  sudo chmod +x /usr/local/bin/docker-machine

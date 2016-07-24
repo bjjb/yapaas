@@ -1,0 +1,8 @@
+#! /usr/bin/env sh
+
+# Checks that homebrew is available. Dies if not.
+which -s brew || (echo 'This script needs homebrew (http://brew.sh)' && exit 1)
+# Check for docker, install it if missing
+which -s docker || brew install docker
+# Check for docker-machine, install it if missing
+which -s docker-machine || brew install docker-machine

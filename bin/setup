@@ -3,6 +3,18 @@ set -euo pipefail
 IFS=$'\n\t'
 set -vx
 
-bundle install
+case "$(uname)" in
+  Linux*)  "./bin/setup.linux" ;;
+  Darwin*) "./bin/setup.macosx" ;;
+  *) 
+    echo "Can't auto-install dependencies, sorry."
+    echo "Please manually install docker and docker-machine for your OS." ;;
+esac
 
-# Do any other automated setup that you need to do here
+m="yapaas.test"
+d="virtualbox"
+
+(docker-machine ls -q | grep -qs "$m") || docker-machine create -d $d "$m"
+[ "$(docker-machine status "$m")" = "Running" ] || docker-machine start "$m"
+
+bundle install
